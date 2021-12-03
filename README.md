@@ -1,2 +1,1 @@
-# zapapp2
-zapapp2
+This is my blogging site for web dev
