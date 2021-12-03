@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="main.css">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Firebase Image Upload in Javascript</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" />
+</head>
+
+<body>
+    <div class="wrapper">
+        <h1 class="title">Upload and GeoTag Your Image</h1>
+        <div id="status"></div>
+        <button id="trigger">Show my location</button>
+
+        <div class="results">
+            <div class="result">
+                <label>Accuracy</label>
+                <div id="accuracy"></div>
+            </div>
+            <div class="result">
+                <label>Latitude</label>
+                <div id="latitude"></div>
+            </div>
+            <div class="result">
+                <label>Longitude</label>
+                <div id="longitude"></div>
+            </div>
+            
+        </div>
+    </div>
+    <div class="container mt-2">
+        <input class="inputbtn" type="file" id="photo" />
+        <img id="image" class="image"/>
+        <button onclick="uploadImage()">Upload Image</button>
+        </div>
+        <div class="row mt-4" id="posts">
+        </div>
+    </div>
+</body>
+<script src="https://www.gstatic.com/firebasejs/7.7.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.7.0/firebase-storage.js"></script>
+
+<script>
+    var firebaseConfig = {
+        apiKey: "AIzaSyCVM4mC8pZTzVtvvMsK_JHxTv12ksSwKvc",
+        authDomain: "thezapapp-4c723.firebaseapp.com",
+        databaseURL: "https://thezapapp-4c723-default-rtdb.europe-west1.firebasedatabase.app",
+        projectId: "thezapapp-4c723",
+        storageBucket: "thezapapp-4c723.appspot.com",
+        messagingSenderId: "208807896154",
+        appId: "1:208807896154:web:90b48be1b20db5218c6463"
+    };
+    
+
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    console.log(firebase);
+
+    function uploadImage() {
+        const ref = firebase.storage().ref();
+        const file = document.querySelector("#photo").files[0];
+        const name = +new Date() + "-" + file.name;
+        const metadata = {
+            contentType: file.type
+        };
+        const task = ref.child(name).put(file, metadata);
+        task
+            .then(snapshot => snapshot.ref.getDownloadURL())
+            .then(url => {
+                console.log(url);
+                document.querySelector("#image").src = url;
+            })
+            .catch(console.error);
+    }
+
+    function getPosts() {
+        const ref = firebase.database().ref("#posts");
+        ref.on("value", snapshot => {
+            const posts = document.querySelector("#posts");
+        });
+        for(let[key,value] of Object.entries(data)){
+        posts_div.innerHTML="<div class='col-sm-4 mt-2 mb-1'>"+
+        "<div class='card'>"+
+        "<img src='"+value.imageURL+"' style='height:250px;'>"+
+        "<div class='card-body'><p class='card-text'>"+value.text+"</p>"+
+        "<button class='btn btn-danger' id='"+key+"' onclick='delete_post(this.id)'>Delete</button>"+
+        "</div></div></div>"+posts_div.innerHTML;
+      }
+    }
+    
+</script>
+
+<script type="module" src="main.js"></script>
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+
+</html>
